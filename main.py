@@ -1,6 +1,8 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from random import randrange
+
+from DB.ManageDB import ManageDB
 from vk_bot import VkBot
 from vk_bot import UserResultsStorage
 
@@ -12,7 +14,11 @@ def get_tokens(file_name: str = "config.ini"):
     config.read(file_name)
     group_token = config['VK']['group_token']
     personal_token = config['VK']['personal_token']
-    return group_token, personal_token
+    db_name = config['DB']['DB_name']
+    db_user_name = config['DB']['DB_user']
+    db_user_password = config['DB']['DB_password']
+
+    return group_token, personal_token, db_name, db_user_name, db_user_password
 
 
 def start_vk_bot(token_1, token_2):
@@ -40,5 +46,6 @@ def start_vk_bot(token_1, token_2):
 
 
 if __name__ == "__main__":
-    tok_1, tok_2 = get_tokens()
+    tok_1, tok_2, db_name, db_user_name, db_user_password = get_tokens()
+    DB = ManageDB(db_name=db_name, user_name=db_user_name, user_password=db_user_password)
     start_vk_bot(tok_1, tok_2)
